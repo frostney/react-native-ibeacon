@@ -1,0 +1,13 @@
+//
+//  RNBeacon.h
+//  RNBeacon
+//
+//  Created by Johannes Stein on 20.04.15.
+//  Copyright (c) 2015 Geniux Consulting. All rights reserved.
+//
+
+#import "RCTBridgeModule.h"
+
+@interface Beacon : NSObject <RCTBridgeModule>
+
+@end
