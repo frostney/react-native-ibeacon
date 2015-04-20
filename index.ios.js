@@ -10,7 +10,29 @@ var {
   StyleSheet,
   Text,
   View,
+  NativeModules,
+  DeviceEventEmitter
 } = React;
+
+var bleacons = {
+  "identifier": "id-5",
+  "uuid": "73676723-7400-0000-FFFF-0000FFFF0005",
+  "minor": 670,
+  "major": 2
+};
+
+var Bacon = NativeModules.Beacon;
+
+Bacon.requestAlwaysAuthorization();
+Bacon.startMonitoringForRegion(bleacons.identifier, bleacons.uuid, bleacons.major, bleacons.minor);
+Bacon.startRangingBeaconsInRegion(bleacons.identifier, bleacons.uuid, bleacons.major, bleacons.minor);
+
+Bacon.startUpdatingLocation();
+
+var subscription = DeviceEventEmitter.addListener(
+  'beaconsDidRange',
+  (data) => alert(JSON.stringify(data))
+);
 
 var RNBeacon = React.createClass({
   render: function() {
