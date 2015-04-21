@@ -49,6 +49,18 @@ RCT_EXPORT_MODULE()
   return beaconRegion;
 }
 
+- (NSString *)stringForProximity:(CLProximity)proximity {
+  switch (proximity) {
+    case CLProximityUnknown:    return @"unknown";
+    case CLProximityFar:        return @"far";
+    case CLProximityNear:       return @"near";
+    case CLProximityImmediate:  return @"immediate";
+    default:
+      return "";
+  }
+}
+
+
 RCT_EXPORT_METHOD(requestAlwaysAuthorization)
 {
   if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
@@ -98,7 +110,7 @@ RCT_EXPORT_METHOD(startUpdatingLocation)
   for (CLBeacon *beacon in beacons) {
     [beaconArray addObject:@{
                              @"rssi": @(beacon.rssi),
-                             @"proximity": @(beacon.proximity)
+                             @"proximity": [self stringForProximity: beacon.proximity]
                              }];
   }
   
