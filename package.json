@@ -1,11 +1,9 @@
 {
-  "name": "RNBeacon",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "start": "node_modules/react-native/packager/packager.sh"
-  },
+  "name": "react-native-ibeacon",
+  "version": "0.1.0",
   "dependencies": {
-    "react-native": "^0.3.11"
-  }
+    "react-native": "^0.4.0"
+  },
+  "keywords": ["react-native", "ibeacon", "beacon"],
+  "main": "RNBeacon.ios.js"
 }

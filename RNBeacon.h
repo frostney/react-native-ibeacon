@@ -8,6 +8,6 @@
 
 #import "RCTBridgeModule.h"
 
-@interface Beacon : NSObject <RCTBridgeModule>
+@interface RNBeacon : NSObject <RCTBridgeModule>
 
 @end
