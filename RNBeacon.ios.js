@@ -6,4 +6,4 @@
 
 var NativeRNBeacon = require('NativeModules').RNBeacon;
 
-module.exports = RNBeacon;
+module.exports = NativeRNBeacon;
