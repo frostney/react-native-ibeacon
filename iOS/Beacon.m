@@ -25,6 +25,8 @@ RCT_EXPORT_MODULE()
 
 @synthesize bridge = _bridge;
 
+#pragma mark Initialization
+
 - (instancetype)init
 {
   if (self = [super init]) {
@@ -37,6 +39,8 @@ RCT_EXPORT_MODULE()
   return self;
 }
 
+#pragma mark
+
 - (CLBeaconRegion *) createBeaconRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major minor:(NSInteger) minor
 {
   NSUUID *beaconUUID = [[NSUUID alloc] initWithUUIDString:uuid];
@@ -45,6 +49,26 @@ RCT_EXPORT_MODULE()
   unsigned short mi = (unsigned short) minor;
   
   CLBeaconRegion *beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:beaconUUID major:mj minor:mi identifier:identifier];
+  
+  return beaconRegion;
+}
+
+- (CLBeaconRegion *) createBeaconRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major
+{
+  NSUUID *beaconUUID = [[NSUUID alloc] initWithUUIDString:uuid];
+  
+  unsigned short mj = (unsigned short) major;
+  
+  CLBeaconRegion *beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:beaconUUID major:mj identifier:identifier];
+  
+  return beaconRegion;
+}
+
+- (CLBeaconRegion *) createBeaconRegion: (NSString *) identifier uuid: (NSString *) uuid
+{
+  NSUUID *beaconUUID = [[NSUUID alloc] initWithUUIDString:uuid];
+  
+  CLBeaconRegion *beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:beaconUUID identifier:identifier];
   
   return beaconRegion;
 }
@@ -82,12 +106,42 @@ RCT_EXPORT_METHOD(startMonitoringForRegion: (NSString *) identifier uuid: (NSStr
   });
 }
 
+RCT_EXPORT_METHOD(startMonitoringForRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major)
+{
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self.locationManager startMonitoringForRegion:[self createBeaconRegion:identifier uuid:uuid major:major]];
+  });
+}
+
+RCT_EXPORT_METHOD(startMonitoringForRegion: (NSString *) identifier uuid: (NSString *) uuid)
+{
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self.locationManager startMonitoringForRegion:[self createBeaconRegion:identifier uuid:uuid]];
+  });
+}
+
+
 RCT_EXPORT_METHOD(startRangingBeaconsInRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major minor:(NSInteger) minor)
 {
   dispatch_async(dispatch_get_main_queue(), ^{
     [self.locationManager startRangingBeaconsInRegion:[self createBeaconRegion:identifier uuid:uuid major:major minor:minor]];
   });
 }
+
+RCT_EXPORT_METHOD(startRangingBeaconsInRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major)
+{
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self.locationManager startRangingBeaconsInRegion:[self createBeaconRegion:identifier uuid:uuid major:major]];
+  });
+}
+
+RCT_EXPORT_METHOD(startRangingBeaconsInRegion: (NSString *) identifier uuid: (NSString *) uuid)
+{
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self.locationManager startRangingBeaconsInRegion:[self createBeaconRegion:identifier uuid:uuid]];
+  });
+}
+
 
 RCT_EXPORT_METHOD(stopMonitoringForRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major minor:(NSInteger) minor)
 {
@@ -96,6 +150,21 @@ RCT_EXPORT_METHOD(stopMonitoringForRegion: (NSString *) identifier uuid: (NSStri
   });
 }
 
+RCT_EXPORT_METHOD(stopMonitoringForRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major)
+{
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self.locationManager stopMonitoringForRegion:[self createBeaconRegion:identifier uuid:uuid major:major]];
+  });
+}
+
+RCT_EXPORT_METHOD(stopMonitoringForRegion: (NSString *) identifier uuid: (NSString *) uuid)
+{
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self.locationManager stopMonitoringForRegion:[self createBeaconRegion:identifier uuid:uuid]];
+  });
+}
+
+
 RCT_EXPORT_METHOD(stopRangingBeaconsInRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major minor:(NSInteger) minor)
 {
   dispatch_async(dispatch_get_main_queue(), ^{
@@ -103,10 +172,26 @@ RCT_EXPORT_METHOD(stopRangingBeaconsInRegion: (NSString *) identifier uuid: (NSS
   });
 }
 
+RCT_EXPORT_METHOD(stopRangingBeaconsInRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major)
+{
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self.locationManager stopRangingBeaconsInRegion:[self createBeaconRegion:identifier uuid:uuid major:major]];
+  });
+}
+
+RCT_EXPORT_METHOD(stopRangingBeaconsInRegion: (NSString *) identifier uuid: (NSString *) uuid)
+{
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self.locationManager stopRangingBeaconsInRegion:[self createBeaconRegion:identifier uuid:uuid]];
+  });
+}
+
+
 RCT_EXPORT_METHOD(startUpdatingLocation)
 {
   [self.locationManager startUpdatingLocation];
 }
+
 
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error {
   NSLog(@"Failed monitoring region: %@", error);
