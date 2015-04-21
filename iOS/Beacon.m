@@ -89,6 +89,20 @@ RCT_EXPORT_METHOD(startRangingBeaconsInRegion: (NSString *) identifier uuid: (NS
   });
 }
 
+RCT_EXPORT_METHOD(stopMonitoringForRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major minor:(NSInteger) minor)
+{
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self.locationManager stopMonitoringForRegion:[self createBeaconRegion:identifier uuid:uuid major:major minor:minor]];
+  });
+}
+
+RCT_EXPORT_METHOD(stopRangingBeaconsInRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major minor:(NSInteger) minor)
+{
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self.locationManager stopRangingBeaconsInRegion:[self createBeaconRegion:identifier uuid:uuid major:major minor:minor]];
+  });
+}
+
 RCT_EXPORT_METHOD(startUpdatingLocation)
 {
   [self.locationManager startUpdatingLocation];
