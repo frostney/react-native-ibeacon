@@ -37,6 +37,18 @@ RCT_EXPORT_MODULE()
   return self;
 }
 
+- (CLBeaconRegion *) createBeaconRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major minor:(NSInteger) minor
+{
+  NSUUID *beaconUUID = [[NSUUID alloc] initWithUUIDString:uuid];
+  
+  unsigned short mj = (unsigned short) major;
+  unsigned short mi = (unsigned short) minor;
+  
+  CLBeaconRegion *beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:beaconUUID major:mj minor:mi identifier:identifier];
+  
+  return beaconRegion;
+}
+
 RCT_EXPORT_METHOD(requestAlwaysAuthorization)
 {
   if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
@@ -54,28 +66,14 @@ RCT_EXPORT_METHOD(requestWhenInUseAuthorization)
 RCT_EXPORT_METHOD(startMonitoringForRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major minor:(NSInteger) minor)
 {
   dispatch_async(dispatch_get_main_queue(), ^{
-    NSUUID *beaconUUID = [[NSUUID alloc] initWithUUIDString:uuid];
-    
-    unsigned short mj = (unsigned short) major;
-    unsigned short mi = (unsigned short) minor;
-    
-    CLBeaconRegion *beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:beaconUUID major:mj minor:mi identifier:identifier];
-    
-    [self.locationManager startMonitoringForRegion:beaconRegion];
+    [self.locationManager startMonitoringForRegion:[self createBeaconRegion:identifier uuid:uuid major:major minor:minor]];
   });
 }
 
 RCT_EXPORT_METHOD(startRangingBeaconsInRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major minor:(NSInteger) minor)
 {
   dispatch_async(dispatch_get_main_queue(), ^{
-    NSUUID *beaconUUID = [[NSUUID alloc] initWithUUIDString:uuid];
-    
-    unsigned short mj = (unsigned short) major;
-    unsigned short mi = (unsigned short) minor;
-    
-    CLBeaconRegion *beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:beaconUUID major:mj minor:mi identifier:identifier];
-    
-    [self.locationManager startRangingBeaconsInRegion:beaconRegion];
+    [self.locationManager startRangingBeaconsInRegion:[self createBeaconRegion:identifier uuid:uuid major:major minor:minor]];
   });
 }
 
@@ -95,6 +93,15 @@ RCT_EXPORT_METHOD(startUpdatingLocation)
 -(void) locationManager:(CLLocationManager *)manager didRangeBeacons:
 (NSArray *)beacons inRegion:(CLBeaconRegion *)region
 {
+  NSMutableArray *beaconArray = [[NSMutableArray alloc] init];
+  
+  for (CLBeacon *beacon in beacons) {
+    [beaconArray addObject:@{
+                             @"rssi": @(beacon.rssi),
+                             @"proximity": @(beacon.proximity)
+                             }];
+  }
+  
   NSDictionary *event = @{
                           @"region": @{
                                 @"identifier": region.identifier,
@@ -102,26 +109,28 @@ RCT_EXPORT_METHOD(startUpdatingLocation)
                                 @"major": region.major,
                                 @"minor": region.minor
                               },
-                          @"beacons": beacons
+                          @"beacons": beaconArray
                           };
   
-  [self.bridge.eventDispatcher sendAppEventWithName:@"beaconsDidRange" body:event];
+  [self.bridge.eventDispatcher sendDeviceEventWithName:@"beaconsDidRange" body:event];
 }
 
 -(void)locationManager:(CLLocationManager *)manager
         didEnterRegion:(CLRegion *)region {
-  [manager startRangingBeaconsInRegion:(CLBeaconRegion*)region];
-  [self.locationManager startUpdatingLocation];
+  NSDictionary *event = @{
+                          @"region": region.identifier,
+                          };
   
-  NSLog(@"You entered the region.");
+  [self.bridge.eventDispatcher sendDeviceEventWithName:@"regionDidEnter" body:event];
 }
 
 -(void)locationManager:(CLLocationManager *)manager
          didExitRegion:(CLRegion *)region {
-  [manager stopRangingBeaconsInRegion:(CLBeaconRegion*)region];
-  [self.locationManager stopUpdatingLocation];
+  NSDictionary *event = @{
+                          @"region": region.identifier,
+                          };
   
-  NSLog(@"You exited the region.");
+  [self.bridge.eventDispatcher sendDeviceEventWithName:@"regionDidExit" body:event];
 }
 
 @end
