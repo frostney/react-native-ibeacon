@@ -34,7 +34,7 @@ npm-debug.log
 node_modules/
 .tmp
 dist
-/src/scripts/main.js
+old
 
 # Binaries
 *.ipa
