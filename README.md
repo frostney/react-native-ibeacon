@@ -1,5 +1,6 @@
 # react-native-ibeacon
 iBeacon support for React Native. The API is very similar to the CoreLocation Objective-C one with the only major difference that regions are plain JavaScript objects.
+Beacons don't work in the iOS simulator.
 
 ## Installation
 Install using npm with `npm install --save react-native-ibeacon`
