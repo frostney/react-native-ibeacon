@@ -56,7 +56,7 @@ RCT_EXPORT_MODULE()
     case CLProximityNear:       return @"near";
     case CLProximityImmediate:  return @"immediate";
     default:
-      return "";
+      return @"";
   }
 }
 
