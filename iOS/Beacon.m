@@ -9,6 +9,7 @@
 #import <CoreLocation/CoreLocation.h>
 
 #import "RCTBridge.h"
+#import "RCTConvert.h"
 #import "RCTEventDispatcher.h"
 
 #import "Beacon.h"
@@ -50,6 +51,8 @@ RCT_EXPORT_MODULE()
   
   CLBeaconRegion *beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:beaconUUID major:mj minor:mi identifier:identifier];
   
+  beaconRegion.notifyEntryStateOnDisplay = YES;
+  
   return beaconRegion;
 }
 
@@ -61,6 +64,8 @@ RCT_EXPORT_MODULE()
   
   CLBeaconRegion *beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:beaconUUID major:mj identifier:identifier];
   
+  beaconRegion.notifyEntryStateOnDisplay = YES;
+  
   return beaconRegion;
 }
 
@@ -70,7 +75,22 @@ RCT_EXPORT_MODULE()
   
   CLBeaconRegion *beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:beaconUUID identifier:identifier];
   
+  beaconRegion.notifyEntryStateOnDisplay = YES;
+  
   return beaconRegion;
+}
+
+- (CLBeaconRegion *) convertDictToBeaconRegion: (NSDictionary *) dict
+{
+  if (dict[@"minor"] == nil) {
+    if (dict[@"major"] == nil) {
+      return [self createBeaconRegion:[RCTConvert NSString:dict[@"identifier"]] uuid:[RCTConvert NSString:dict[@"uuid"]]];
+    } else {
+      return [self createBeaconRegion:[RCTConvert NSString:dict[@"identifier"]] uuid:[RCTConvert NSString:dict[@"uuid"]] major:[RCTConvert NSInteger:dict[@"major"]]];
+    }
+  } else {
+    return [self createBeaconRegion:[RCTConvert NSString:dict[@"identifier"]] uuid:[RCTConvert NSString:dict[@"uuid"]] major:[RCTConvert NSInteger:dict[@"major"]] minor:[RCTConvert NSInteger:dict[@"minor"]]];
+  }
 }
 
 - (NSString *)stringForProximity:(CLProximity)proximity {
@@ -83,7 +103,6 @@ RCT_EXPORT_MODULE()
       return @"";
   }
 }
-
 
 RCT_EXPORT_METHOD(requestAlwaysAuthorization)
 {
@@ -99,32 +118,24 @@ RCT_EXPORT_METHOD(requestWhenInUseAuthorization)
   }
 }
 
-RCT_EXPORT_METHOD(startMonitoringForRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major minor:(NSInteger) minor)
-{  
-  dispatch_async(dispatch_get_main_queue(), ^{
-    [self.locationManager startMonitoringForRegion:[self createBeaconRegion:identifier uuid:uuid major:major minor:minor]];
-  });
+RCT_EXPORT_METHOD(startMonitoringForRegion:(NSDictionary *) dict)
+{
+  [self.locationManager startMonitoringForRegion:[self convertDictToBeaconRegion:dict]];
 }
 
-RCT_EXPORT_METHOD(startRangingBeaconsInRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major minor:(NSInteger) minor)
+RCT_EXPORT_METHOD(startRangingBeaconsInRegion:(NSDictionary *) dict)
 {
-  dispatch_async(dispatch_get_main_queue(), ^{
-    [self.locationManager startRangingBeaconsInRegion:[self createBeaconRegion:identifier uuid:uuid major:major minor:minor]];
-  });
+  [self.locationManager startRangingBeaconsInRegion:[self convertDictToBeaconRegion:dict]];
 }
 
-RCT_EXPORT_METHOD(stopMonitoringForRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major minor:(NSInteger) minor)
+RCT_EXPORT_METHOD(stopMonitoringForRegion:(NSDictionary *) dict)
 {
-  dispatch_async(dispatch_get_main_queue(), ^{
-    [self.locationManager stopMonitoringForRegion:[self createBeaconRegion:identifier uuid:uuid major:major minor:minor]];
-  });
+  [self.locationManager stopMonitoringForRegion:[self convertDictToBeaconRegion:dict]];
 }
 
-RCT_EXPORT_METHOD(stopRangingBeaconsInRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major minor:(NSInteger) minor)
+RCT_EXPORT_METHOD(stopRangingBeaconsInRegion:(NSDictionary *) dict)
 {
-  dispatch_async(dispatch_get_main_queue(), ^{
-    [self.locationManager stopRangingBeaconsInRegion:[self createBeaconRegion:identifier uuid:uuid major:major minor:minor]];
-  });
+  [self.locationManager stopRangingBeaconsInRegion:[self convertDictToBeaconRegion:dict]];
 }
 
 RCT_EXPORT_METHOD(startUpdatingLocation)
@@ -148,8 +159,13 @@ RCT_EXPORT_METHOD(startUpdatingLocation)
   
   for (CLBeacon *beacon in beacons) {
     [beaconArray addObject:@{
-                             @"rssi": @(beacon.rssi),
-                             @"proximity": [self stringForProximity: beacon.proximity]
+                             @"uuid": [beacon.proximityUUID UUIDString],
+                             @"major": beacon.major,
+                             @"minor": beacon.minor,
+                             
+                             @"rssi": [NSNumber numberWithLong:beacon.rssi],
+                             @"proximity": [self stringForProximity: beacon.proximity],
+                             @"accuracy": [NSNumber numberWithDouble: beacon.accuracy]
                              }];
   }
   
@@ -157,8 +173,6 @@ RCT_EXPORT_METHOD(startUpdatingLocation)
                           @"region": @{
                                 @"identifier": region.identifier,
                                 @"uuid": [region.proximityUUID UUIDString],
-                                @"major": region.major,
-                                @"minor": region.minor
                               },
                           @"beacons": beaconArray
                           };
@@ -167,7 +181,7 @@ RCT_EXPORT_METHOD(startUpdatingLocation)
 }
 
 -(void)locationManager:(CLLocationManager *)manager
-        didEnterRegion:(CLRegion *)region {
+        didEnterRegion:(CLRegion *)region {  
   NSDictionary *event = @{
                           @"region": region.identifier,
                           };
