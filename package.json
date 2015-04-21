@@ -1,6 +1,6 @@
 {
   "name": "react-native-ibeacon",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "dependencies": {
     "react-native": "^0.4.0"
   },
