@@ -144,6 +144,11 @@ RCT_EXPORT_METHOD(startUpdatingLocation)
 }
 
 
+- (void)locationManager:(CLLocationManager *)manager rangingBeaconsDidFailForRegion:(CLBeaconRegion *)region withError:(NSError *)error
+{
+    NSLog(@"Failed ranging region: %@", error);
+}
+
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error {
     NSLog(@"Failed monitoring region: %@", error);
 }
