@@ -144,8 +144,40 @@ RCT_EXPORT_METHOD(startUpdatingLocation)
 }
 
 
-- (void)locationManager:(CLLocationManager *)manager rangingBeaconsDidFailForRegion:(CLBeaconRegion *)region withError:(NSError *)error
+-(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
+    NSString *statusName = @"";
+    
+    switch (status) {
+        case kCLAuthorizationStatusAuthorizedAlways:
+            statusName = @"authorizedAlways";
+            break;
+            
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            statusName = @"authorizedWhenInUse";
+            break;
+            
+        case kCLAuthorizationStatusDenied:
+            statusName = @"denied";
+            break;
+            
+        case kCLAuthorizationStatusNotDetermined:
+            statusName = @"notDetermined";
+            break;
+            
+        case kCLAuthorizationStatusRestricted:
+            statusName = @"restricted";
+            break;
+            
+        default:
+            break;
+    }
+    
+    [self.bridge.eventDispatcher sendDeviceEventWithName:@"authorizationStatusDidChange" body:statusName];
+}
+
+- (void)locationManager:(CLLocationManager *)manager rangingBeaconsDidFailForRegion:(CLBeaconRegion *)region withError:(NSError *)error
+{    
     NSLog(@"Failed ranging region: %@", error);
 }
 
