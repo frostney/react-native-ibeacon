@@ -4,6 +4,6 @@
   "dependencies": {
     "react-native": "^0.4.0"
   },
-  "keywords": ["react-native", "ibeacon", "beacon"],
+  "keywords": ["react-native", "react-component", "ios", "ibeacon", "beacon"],
   "main": "RNBeacon.ios.js"
 }
