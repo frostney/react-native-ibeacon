@@ -116,6 +116,13 @@ As for the payload, we get a property called `region` that represents the region
 }
 ```
 
+###authorizationDidChange
+When the user permissions change, for example the user allows to always use beacons, this event will be called. The same applies when the user revokes the permission to use beacons.
+```javascript
+// The payload is a string which can either be:
+// "authorizedAlways", "authorizedWhenInUse", "denied", "notDetermined" or "restricted"
+```
+
 ## Troubleshooting
 
 ### In the `beaconsDidRange` event, the `beacons` property is just an empty array.
