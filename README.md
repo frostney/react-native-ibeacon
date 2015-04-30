@@ -52,7 +52,7 @@ var subscription = DeviceEventEmitter.addListener(
 );
 ```
 
-It is recommended to set in `NSWhenInUseUsageDescription` in your `Info.plist` file.
+It is recommended to set `NSWhenInUseUsageDescription` in your `Info.plist` file.
 
 ## Background mode
 For background mode to work, a few things need to be configured:
