@@ -95,6 +95,7 @@ A `Beacon` is an object that follows this structure:
   accuracy: Number // A calculated distance value from the device to the beacon
 }
 ```
+By default, the array is sorted by the `rssi` value of the beacons.
 
 ### regionDidEnter
 If the device entered a region, `regionDidEnter` is being called.
