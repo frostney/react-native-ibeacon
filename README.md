@@ -95,6 +95,7 @@ A `Beacon` is an object that follows this structure:
   accuracy: Number // A calculated distance value from the device to the beacon
 }
 ```
+By default, the array is sorted by the `rssi` value of the beacons.
 
 ### regionDidEnter
 If the device entered a region, `regionDidEnter` is being called.
@@ -132,8 +133,9 @@ There are several things that trigger that behavior, so it's best to follow thes
 2. Check if your beacon batteries aren't empty
 3. If monitoring and ranging for beacons, make sure to first monitor and then range
 
-## Code style guide
+## Style guide
 It uses the Geniux code style guide, for more information see: https://github.com/geniuxconsulting/javascript
+For commit message, we are following the commit guide from https://github.com/geniuxconsulting/guideline
 
 ## License
 MIT, for more information see `LICENSE`
