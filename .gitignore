@@ -33,7 +33,6 @@ $RECYCLE.BIN/
 npm-debug.log
 node_modules/
 .tmp
-dist
 old
 
 # Binaries
@@ -41,8 +40,6 @@ old
 *.zip
 
 # Xcode
-platform-ios/*/data
-platform-ios/*/dist
 build/
 *.pbxuser
 !default.pbxuser
@@ -58,6 +55,7 @@ xcuserdata
 profile
 *.moved-aside
 DerivedData
+
 .idea/
 
 # Pods - for those of you who use CocoaPods
