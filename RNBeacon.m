@@ -218,18 +218,20 @@ RCT_EXPORT_METHOD(startUpdatingLocation)
 }
 
 -(void)locationManager:(CLLocationManager *)manager
-        didEnterRegion:(CLRegion *)region {
+        didEnterRegion:(CLBeaconRegion *)region {
     NSDictionary *event = @{
                             @"region": region.identifier,
+                            @"uuid": [region.proximityUUID UUIDString],
                             };
     
     [self.bridge.eventDispatcher sendDeviceEventWithName:@"regionDidEnter" body:event];
 }
 
 -(void)locationManager:(CLLocationManager *)manager
-         didExitRegion:(CLRegion *)region {
+         didExitRegion:(CLBeaconRegion *)region {
     NSDictionary *event = @{
                             @"region": region.identifier,
+                            @"uuid": [region.proximityUUID UUIDString],
                             };
     
     [self.bridge.eventDispatcher sendDeviceEventWithName:@"regionDidExit" body:event];
