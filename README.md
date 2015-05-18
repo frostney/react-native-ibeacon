@@ -137,7 +137,8 @@ There are several things that trigger that behavior, so it's best to follow thes
 
 ## Style guide
 It uses the Geniux code style guide, for more information see: https://github.com/geniuxconsulting/javascript
-For commit message, we are following the commit guide from https://github.com/geniuxconsulting/guideline
+
+For commit messages, we are following the commit guide from https://github.com/geniuxconsulting/guideline
 
 ## License
 MIT, for more information see `LICENSE`
