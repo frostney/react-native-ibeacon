@@ -100,20 +100,22 @@ By default, the array is sorted by the `rssi` value of the beacons.
 ### regionDidEnter
 If the device entered a region, `regionDidEnter` is being called.
 
-Inside the callback the paramter we can use returns an object with a property `region` that contains the region identifier value as a string.
+Inside the callback the paramter we can use returns an object with a property `region` that contains the region identifier value as a string. Additionally, we get the UUID of the region through its `uuid` property.
 ```javascript
 {
-  region: String
+  region: String,
+  uuid: String
 }
 ```
 
 ### regionDidExit
 In the same `regionDidEnter` is called if the device entered a region, `regionDidExit` will be called if the device exited a region and we can't get any signal from any of the beacons inside the region.
 
-As for the payload, we get a property called `region` that represents the region identifier and is a string.
+As for the payload, we get a property called `region` that represents the region identifier and is a string as well as the `uuid`.
 ```javascript
 {
-  region: String
+  region: String,
+  uuid: String
 }
 ```
 
