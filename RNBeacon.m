@@ -118,6 +118,11 @@ RCT_EXPORT_METHOD(requestWhenInUseAuthorization)
     }
 }
 
+RCT_EXPORT_METHOD(getAuthorizationStatus:(RCTResponseSenderBlock)callback)
+{
+    callback(@[[self nameForAuthorizationStatus:[CLLocationManager authorizationStatus]]]);
+}
+
 RCT_EXPORT_METHOD(startMonitoringForRegion:(NSDictionary *) dict)
 {
     [self.locationManager startMonitoringForRegion:[self convertDictToBeaconRegion:dict]];
@@ -143,36 +148,29 @@ RCT_EXPORT_METHOD(startUpdatingLocation)
     [self.locationManager startUpdatingLocation];
 }
 
+-(NSString *)nameForAuthorizationStatus:(CLAuthorizationStatus)authorizationStatus
+{
+    switch (authorizationStatus) {
+        case kCLAuthorizationStatusAuthorizedAlways:
+            return @"authorizedAlways";
+
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            return @"authorizedWhenInUse";
+
+        case kCLAuthorizationStatusDenied:
+            return @"denied";
+
+        case kCLAuthorizationStatusNotDetermined:
+            return @"notDetermined";
+
+        case kCLAuthorizationStatusRestricted:
+            return @"restricted";
+    }
+}
 
 -(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
-    NSString *statusName = @"";
-    
-    switch (status) {
-        case kCLAuthorizationStatusAuthorizedAlways:
-            statusName = @"authorizedAlways";
-            break;
-            
-        case kCLAuthorizationStatusAuthorizedWhenInUse:
-            statusName = @"authorizedWhenInUse";
-            break;
-            
-        case kCLAuthorizationStatusDenied:
-            statusName = @"denied";
-            break;
-            
-        case kCLAuthorizationStatusNotDetermined:
-            statusName = @"notDetermined";
-            break;
-            
-        case kCLAuthorizationStatusRestricted:
-            statusName = @"restricted";
-            break;
-            
-        default:
-            break;
-    }
-    
+    NSString *statusName = [self nameForAuthorizationStatus:status];
     [self.bridge.eventDispatcher sendDeviceEventWithName:@"authorizationStatusDidChange" body:statusName];
 }
 
@@ -218,18 +216,20 @@ RCT_EXPORT_METHOD(startUpdatingLocation)
 }
 
 -(void)locationManager:(CLLocationManager *)manager
-        didEnterRegion:(CLRegion *)region {
+        didEnterRegion:(CLBeaconRegion *)region {
     NSDictionary *event = @{
                             @"region": region.identifier,
+                            @"uuid": [region.proximityUUID UUIDString],
                             };
     
     [self.bridge.eventDispatcher sendDeviceEventWithName:@"regionDidEnter" body:event];
 }
 
 -(void)locationManager:(CLLocationManager *)manager
-         didExitRegion:(CLRegion *)region {
+         didExitRegion:(CLBeaconRegion *)region {
     NSDictionary *event = @{
                             @"region": region.identifier,
+                            @"uuid": [region.proximityUUID UUIDString],
                             };
     
     [self.bridge.eventDispatcher sendDeviceEventWithName:@"regionDidExit" body:event];
