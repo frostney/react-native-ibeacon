@@ -148,6 +148,11 @@ RCT_EXPORT_METHOD(startUpdatingLocation)
     [self.locationManager startUpdatingLocation];
 }
 
+RCT_EXPORT_METHOD(stopUpdatingLocation)
+{
+    [self.locationManager stopUpdatingLocation];
+}
+
 -(NSString *)nameForAuthorizationStatus:(CLAuthorizationStatus)authorizationStatus
 {
     switch (authorizationStatus) {
