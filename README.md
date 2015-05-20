@@ -126,6 +126,13 @@ Beacons.startUpdatingLocation();
 
 This call is needed for monitoring beacons and gets the initial position of the device.
 
+### Beacons.stopUpdatingLocation
+```javascript
+Beacons.stopUpdatingLocation();
+```
+
+This method should be called when you don't need to receive location-based information and want to save battery power.
+
 ## Events
 To listen to events we need to call `DeviceEventEmitter.addListener` (`var {DeviceEventEmitter} = require('react-native')`) where the first parameter is the event we want to listen to and the second is a callback function that will be called once the event is triggered.
 
