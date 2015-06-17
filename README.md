@@ -54,7 +54,7 @@ var subscription = DeviceEventEmitter.addListener(
 );
 ```
 
-It is recommended to set `NSWhenInUseUsageDescription` in your `Info.plist` file.
+It is recommended to set `NSLocationWhenInUseUsageDescription` in your `Info.plist` file.
 
 ## Background mode
 For background mode to work, a few things need to be configured:
@@ -67,6 +67,16 @@ Beacons.requestAlwaysAuthorization();
 ```
 
 Here, it's also recommended to set `NSLocationAlwaysUsageDescription` in your `Info.plist` file.
+
+Finally when killed or sleeping and a beacon is found your whole app wont be loaded, just the `didFinishLaunchingWithOptions:(NSDictionary *)launchOptions` delegate so you need to act on it there like:
+```
+  // a region we were scanning for has appeared, ask to open us
+  if([launchOptions objectForKey:@"UIApplicationLaunchOptionsLocationKey"])
+  {
+    //pop a notification to ask user to open, or maybe reload your scanner with delegate so that code fires
+  }
+```
+
 
 ## Methods
 
