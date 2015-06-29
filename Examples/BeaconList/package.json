@@ -7,7 +7,7 @@
     "bundle": "react-native bundle --minify"
   },
   "dependencies": {
-    "react-native": "^0.4.1",
-    "react-native-ibeacon": "^0.1.1"
+    "react-native": "^0.5.0",
+    "react-native-ibeacon": "^0.4.0"
   }
 }
