@@ -6,12 +6,7 @@
  */
 'use strict';
 
-var warning = require('warning');
+var React = require('react-native');
+var NativeRNBeacon = React.NativeModules.RNBeacon;
 
-var RNBeacon = {
-  test: function() {
-    warning("Not yet implemented for Android.");
-  }
-};
-
-module.exports = RNBeacon;
+module.exports = NativeRNBeacon;
