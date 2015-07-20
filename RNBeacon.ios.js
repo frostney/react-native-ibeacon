@@ -4,6 +4,7 @@
  */
 'use strict';
 
-var NativeRNBeacon = require('NativeModules').RNBeacon;
+var React = require('react-native');
+var NativeRNBeacon = React.NativeModules.RNBeacon;
 
 module.exports = NativeRNBeacon;
