@@ -58,6 +58,7 @@ It is recommended to set `NSLocationWhenInUseUsageDescription` in your `Info.pli
 For background mode to work, a few things need to be configured:
 In the Xcode project, go to Capabilities, switch on "Background Modes" and check both "Location updates" and "Uses Bluetooth LE accessories".
 
+![bgmode](https://raw.githubusercontent.com/frostney/react-native-ibeacon/master/bgmode.gif)
 
 Then, instead of using `requestWhenInUseAuthorization` the method `requestAlwaysAuthorization`.
 ```javascript
