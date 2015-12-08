@@ -2,6 +2,8 @@
 iBeacon support for React Native. The API is very similar to the CoreLocation Objective-C one with the only major difference that regions are plain JavaScript objects.
 Beacons don't work in the iOS simulator.
 
+Looking for an Android version? Try out @octavioturra's AltBeacon: https://github.com/octavioturra/react-native-alt-beacon
+
 ## Installation
 Install using npm with `npm install --save react-native-ibeacon`. React Native >=0.4.0 is needed.
 
