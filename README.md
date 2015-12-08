@@ -4,6 +4,9 @@ Beacons don't work in the iOS simulator.
 
 Looking for an Android version? Try out @octavioturra's AltBeacon: https://github.com/octavioturra/react-native-alt-beacon
 
+## Support
+This module supports all iBeacon-compatible devices. Personally, I had the best experience with Estimote beacons, but all devices that support the iBeacon specification should work.
+
 ## Installation
 Install using npm with `npm install --save react-native-ibeacon`. React Native >=0.4.0 is needed.
 
