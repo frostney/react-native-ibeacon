@@ -17,6 +17,7 @@
 @interface RNBeacon() <CLLocationManagerDelegate>
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
+@property (assign, nonatomic) BOOL dropEmptyRanges;
 
 @end
 
@@ -35,6 +36,7 @@ RCT_EXPORT_MODULE()
         
         self.locationManager.delegate = self;
         self.locationManager.pausesLocationUpdatesAutomatically = NO;
+        self.dropEmptyRanges = NO;
     }
     
     return self;
@@ -153,6 +155,11 @@ RCT_EXPORT_METHOD(stopUpdatingLocation)
     [self.locationManager stopUpdatingLocation];
 }
 
+RCT_EXPORT_METHOD(shouldDropEmptyRanges:(BOOL)drop)
+{
+    self.dropEmptyRanges = drop;
+}
+
 -(NSString *)nameForAuthorizationStatus:(CLAuthorizationStatus)authorizationStatus
 {
     switch (authorizationStatus) {
@@ -195,6 +202,9 @@ RCT_EXPORT_METHOD(stopUpdatingLocation)
 -(void) locationManager:(CLLocationManager *)manager didRangeBeacons:
 (NSArray *)beacons inRegion:(CLBeaconRegion *)region
 {
+    if (self.dropEmptyRanges && beacons.count == 0) {
+        return;
+    }
     NSMutableArray *beaconArray = [[NSMutableArray alloc] init];
     
     for (CLBeacon *beacon in beacons) {
