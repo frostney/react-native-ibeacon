@@ -21,12 +21,12 @@ var {DeviceEventEmitter} = React;
 
 var Beacons = require('react-native-ibeacon');
 
-// Define a region which can be identifier + uuid, 
+// Define a region which can be identifier + uuid,
 // identifier + uuid + major or identifier + uuid + major + minor
 // (minor and major properties are numbers)
 var region = {
 	identifier: 'Estimotes',
-	uuid: 'B9407F30-F5F8-466E-AFF9-25556B57FE6D'	
+	uuid: 'B9407F30-F5F8-466E-AFF9-25556B57FE6D'
 };
 
 // Request for authorization while the app is open
@@ -103,7 +103,7 @@ This method should be called before anything else is called. It handles to reque
 ### Beacons.getAuthorizationStatus
 ```javascript
 Beacons.getAuthorizationStatus(function(authorization) {
-  // authorization is a string which is either "authorizedAlways", 
+  // authorization is a string which is either "authorizedAlways",
   // "authorizedWhenInUse", "denied", "notDetermined" or "restricted"
 });
 ```
@@ -114,7 +114,7 @@ This methods gets the current authorization status. While this methods provides 
 ```javascript
 var region = {
   identifier: 'Estimotes',
-  uuid: 'B9407F30-F5F8-466E-AFF9-25556B57FE6D'	
+  uuid: 'B9407F30-F5F8-466E-AFF9-25556B57FE6D'
 };
 
 Beacons.startMonitoringForRegion(region);
@@ -125,7 +125,7 @@ When starting monitoring for beacons, we need to define a region as the paramete
 ```javascript
 var region = {
   identifier: 'Estimotes',
-  uuid: 'B9407F30-F5F8-466E-AFF9-25556B57FE6D'	
+  uuid: 'B9407F30-F5F8-466E-AFF9-25556B57FE6D'
 };
 
 Beacons.startRangingBeaconsInRegion(region);
@@ -175,7 +175,7 @@ A `Beacon` is an object that follows this structure:
   uuid: String, // The uuid for the beacon
   major: Number, // A beacon's major value
   minor: Number, // A beacon's minor value
-  rssi: Number, // The signal strength, where -100 is the maximum value and 0 the minium. 
+  rssi: Number, // The signal strength, where -100 is the maximum value and 0 the minium.
                 // If the value is 0, this corresponds to not being able to get a precise value
   proximity: String, // Fuzzy value representation of the signal strength.
   		     // Can either be "far", "near", "immediate" or "unknown"
@@ -229,3 +229,6 @@ For commit messages, we are following the commit guide from https://github.com/g
 
 ## License
 MIT, for more information see `LICENSE`
+
+## Changelog
+See `CHANGELOG.md`
