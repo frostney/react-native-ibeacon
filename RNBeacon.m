@@ -8,9 +8,19 @@
 
 #import <CoreLocation/CoreLocation.h>
 
+#if __has_include(<React/RCTBridge.h>)
+
 #import <React/RCTBridge.h>
 #import <React/RCTConvert.h>
 #import <React/RCTEventDispatcher.h>
+
+#else
+
+#import "RCTBridge.h"
+#import "RCTConvert.h"
+#import "RCTEventDispatcher.h"
+
+#endif
 
 #import "RNBeacon.h"
 
