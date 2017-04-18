@@ -8,7 +8,7 @@
 
 #import <CoreLocation/CoreLocation.h>
 
-#import "RCTBridge.h"
+//#import "RCTBridge.h"
 #import "RCTConvert.h"
 #import "RCTEventDispatcher.h"
 
