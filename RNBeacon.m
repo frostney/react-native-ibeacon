@@ -8,9 +8,9 @@
 
 #import <CoreLocation/CoreLocation.h>
 
-#import "RCTBridge.h"
-#import "RCTConvert.h"
-#import "RCTEventDispatcher.h"
+#import <React/RCTBridge.h>
+#import <React/RCTConvert.h>
+#import <React/RCTEventDispatcher.h>
 
 #import "RNBeacon.h"
 
@@ -33,12 +33,12 @@ RCT_EXPORT_MODULE()
 {
     if (self = [super init]) {
         self.locationManager = [[CLLocationManager alloc] init];
-        
+
         self.locationManager.delegate = self;
         self.locationManager.pausesLocationUpdatesAutomatically = NO;
         self.dropEmptyRanges = NO;
     }
-    
+
     return self;
 }
 
@@ -47,38 +47,38 @@ RCT_EXPORT_MODULE()
 - (CLBeaconRegion *) createBeaconRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major minor:(NSInteger) minor
 {
     NSUUID *beaconUUID = [[NSUUID alloc] initWithUUIDString:uuid];
-    
+
     unsigned short mj = (unsigned short) major;
     unsigned short mi = (unsigned short) minor;
-    
+
     CLBeaconRegion *beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:beaconUUID major:mj minor:mi identifier:identifier];
-    
+
     beaconRegion.notifyEntryStateOnDisplay = YES;
-    
+
     return beaconRegion;
 }
 
 - (CLBeaconRegion *) createBeaconRegion: (NSString *) identifier uuid: (NSString *) uuid major: (NSInteger) major
 {
     NSUUID *beaconUUID = [[NSUUID alloc] initWithUUIDString:uuid];
-    
+
     unsigned short mj = (unsigned short) major;
-    
+
     CLBeaconRegion *beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:beaconUUID major:mj identifier:identifier];
-    
+
     beaconRegion.notifyEntryStateOnDisplay = YES;
-    
+
     return beaconRegion;
 }
 
 - (CLBeaconRegion *) createBeaconRegion: (NSString *) identifier uuid: (NSString *) uuid
 {
     NSUUID *beaconUUID = [[NSUUID alloc] initWithUUIDString:uuid];
-    
+
     CLBeaconRegion *beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:beaconUUID identifier:identifier];
-    
+
     beaconRegion.notifyEntryStateOnDisplay = YES;
-    
+
     return beaconRegion;
 }
 
@@ -187,7 +187,7 @@ RCT_EXPORT_METHOD(shouldDropEmptyRanges:(BOOL)drop)
 }
 
 - (void)locationManager:(CLLocationManager *)manager rangingBeaconsDidFailForRegion:(CLBeaconRegion *)region withError:(NSError *)error
-{    
+{
     NSLog(@"Failed ranging region: %@", error);
 }
 
@@ -206,19 +206,19 @@ RCT_EXPORT_METHOD(shouldDropEmptyRanges:(BOOL)drop)
         return;
     }
     NSMutableArray *beaconArray = [[NSMutableArray alloc] init];
-    
+
     for (CLBeacon *beacon in beacons) {
         [beaconArray addObject:@{
                                  @"uuid": [beacon.proximityUUID UUIDString],
                                  @"major": beacon.major,
                                  @"minor": beacon.minor,
-                                 
+
                                  @"rssi": [NSNumber numberWithLong:beacon.rssi],
                                  @"proximity": [self stringForProximity: beacon.proximity],
                                  @"accuracy": [NSNumber numberWithDouble: beacon.accuracy]
                                  }];
     }
-    
+
     NSDictionary *event = @{
                             @"region": @{
                                     @"identifier": region.identifier,
@@ -226,7 +226,7 @@ RCT_EXPORT_METHOD(shouldDropEmptyRanges:(BOOL)drop)
                                     },
                             @"beacons": beaconArray
                             };
-    
+
     [self.bridge.eventDispatcher sendDeviceEventWithName:@"beaconsDidRange" body:event];
 }
 
@@ -236,7 +236,7 @@ RCT_EXPORT_METHOD(shouldDropEmptyRanges:(BOOL)drop)
                             @"region": region.identifier,
                             @"uuid": [region.proximityUUID UUIDString],
                             };
-    
+
     [self.bridge.eventDispatcher sendDeviceEventWithName:@"regionDidEnter" body:event];
 }
 
@@ -246,7 +246,7 @@ RCT_EXPORT_METHOD(shouldDropEmptyRanges:(BOOL)drop)
                             @"region": region.identifier,
                             @"uuid": [region.proximityUUID UUIDString],
                             };
-    
+
     [self.bridge.eventDispatcher sendDeviceEventWithName:@"regionDidExit" body:event];
 }
 
